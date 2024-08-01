@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:system_theme/system_theme.dart';
 
-void main() {
+void main() async{
+  await SystemTheme.accentColor.load();
   runApp(const MyApp());
 }
 
@@ -11,6 +12,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final accentColor = SystemTheme.accentColor.accent;
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -29,10 +31,10 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme:  ColorScheme.fromSeed(seedColor: accentColor),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'SevenUpSevenDown'),
     );
   }
 }
@@ -97,13 +99,11 @@ class _MyHomePageState extends State<MyHomePage> {
   void _undo() {
     setState(() {
       playerTurn--;
-      expectedWins[playerTurn] = 0;
+      _counter = expectedWins[playerTurn];
     });
   }
   @override
   Widget build(BuildContext context) {
-    String name1 = '';
-    setState(() => name1 = _names[0]);
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -141,6 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Title(color: Colors.black, child: const Text('Round 1', style: TextStyle(fontSize:20, fontWeight: FontWeight.bold))),
             Text('P1 ${expectedWins[0]} P2 ${expectedWins[1]} P3 ${expectedWins[2]} P3 ${expectedWins[3]}'),
             ExpectedWinsCard(counter: _counter),
             Row(
@@ -162,58 +163,40 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(onPressed: _undo, child: Text('undo turn')),
+            const SizedBox(width:20),
             ElevatedButton(onPressed: _submitExpectedWins, child: Text('Submit')),
           ],
         ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Card(color:Colors.green, child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                          children: [Text(_names[0]), Text('${score[0]}')]),
+                )
+                ),
+                Card(color:Colors.deepOrange, child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                          children: [Text(_names[1]), Text('${score[1]}')]),
+                )
+                ),
+                Card(color:Colors.blue, child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                      children: [Text(_names[2]), Text('${score[2]}')]),
+                )
+                ),
+                Card(color:Colors.deepPurple, child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                      children: [Text(_names[3]), Text('${score[3]}')]),
+                )
+                ),
+              ]
 
-        DataTable(
-          columns: <DataColumn> [
-            DataColumn(label: Text('Round')),
-            DataColumn(label: Text(_names[0])),
-            DataColumn(label: Text(_names[1])),
-            DataColumn(label: Text(_names[2])),
-            DataColumn(label: Text(_names[3])),
-          ],
-          rows: <DataRow>[
-            DataRow(
-              cells: <DataCell>[
-                DataCell(Text('0')),
-                DataCell(Text('$_counter')),
-                DataCell(Text('Student')),
-                DataCell(Text('Student')),
-                DataCell(Text('Student'))
-              ],
-            ),
-            DataRow(
-              cells: <DataCell>[
-                DataCell(Text('1')),
-                DataCell(Text('43')),
-                DataCell(Text('Professor')),
-                DataCell(Text('Student')),
-                DataCell(Text('Student'))
-              ],
-            ),
-
-            DataRow(
-              cells: <DataCell>[
-                DataCell(Text('2')),
-                DataCell(Text('27')),
-                DataCell(Text('Associate Professor')),
-                DataCell(Text('Student')),
-                DataCell(Text('Student'))
-              ],
-            ),
-            DataRow(
-              cells: <DataCell>[
-                DataCell(Text('2')),
-                DataCell(Text('27')),
-                DataCell(Text('Associate Professor')),
-                DataCell(Text('Student')),
-                DataCell(Text('Student'))
-              ],
-            ),
-          ],
-        )
+            )
           ],
         ),
       ),
