@@ -142,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             DataColumn(
               label: Expanded(
-                child: Text(,
+                child: Text('hello',
                   style: TextStyle(fontStyle: FontStyle.italic),
                 ),
               ),
