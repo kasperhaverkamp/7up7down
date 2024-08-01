@@ -54,17 +54,14 @@ class MyHomePage extends StatefulWidget {
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
-class MyAppState extends ChangeNotifier {
-  var name_list = ['Kasper', 'Niek', 'Claudia', 'Erik'];
-}
+
 class _MyHomePageState extends State<MyHomePage> {
+
+  int roundNumber = 0;
   int _counter = 0;
-
-  void expected_wins() {
-    setState(() {
-
-    });
-  }
+  List<int> expectedWins = [0, 0, 0, 0];
+  List<int> score = [0, 0, 0, 0];
+  List<String> _names = ['Kasper', 'Erik', 'Claudia', 'Niek'];
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -76,10 +73,21 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _subtractCounter() {
+    setState(() {
+      _counter--;
+    });
+  }
+  void submitExpectedWins() {
+    setState(() {
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
+    String name1 = '';
+    setState(() => name1 = _names[0]);
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -96,7 +104,9 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
+      body:
+
+      Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
@@ -120,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 FloatingActionButton.large(
-                    onPressed: _incrementCounter,
+                    onPressed: _subtractCounter,
                     child: const Icon(Icons.remove),
                 ),
                const SizedBox(width: 20),
@@ -131,51 +141,49 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
         DataTable(
-          columns: const <DataColumn>[
-            DataColumn(
-              label: Expanded(
-                child: Text(
-                  'Round',
-                  style: TextStyle(fontStyle: FontStyle.italic),
-                ),
-              ),
-            ),
-            DataColumn(
-              label: Expanded(
-                child: Text('hello',
-                  style: TextStyle(fontStyle: FontStyle.italic),
-                ),
-              ),
-            ),
-            DataColumn(
-              label: Expanded(
-                child: Text(
-                  'Role',
-                  style: TextStyle(fontStyle: FontStyle.italic),
-                ),
-              ),
-            ),
+          columns: <DataColumn> [
+            DataColumn(label: Text('Round')),
+            DataColumn(label: Text(_names[0])),
+            DataColumn(label: Text(_names[1])),
+            DataColumn(label: Text(_names[2])),
+            DataColumn(label: Text(_names[3])),
           ],
-          rows: const <DataRow>[
+          rows: <DataRow>[
             DataRow(
               cells: <DataCell>[
-                DataCell(Text('Sarah')),
-                DataCell(Text('19')),
+                DataCell(Text('0')),
+                DataCell(Text('$_counter')),
                 DataCell(Text('Student')),
+                DataCell(Text('Student')),
+                DataCell(Text('Student'))
               ],
             ),
             DataRow(
               cells: <DataCell>[
-                DataCell(Text('Janine')),
+                DataCell(Text('1')),
                 DataCell(Text('43')),
                 DataCell(Text('Professor')),
+                DataCell(Text('Student')),
+                DataCell(Text('Student'))
+              ],
+            ),
+
+            DataRow(
+              cells: <DataCell>[
+                DataCell(Text('2')),
+                DataCell(Text('27')),
+                DataCell(Text('Associate Professor')),
+                DataCell(Text('Student')),
+                DataCell(Text('Student'))
               ],
             ),
             DataRow(
               cells: <DataCell>[
-                DataCell(Text('William')),
+                DataCell(Text('2')),
                 DataCell(Text('27')),
                 DataCell(Text('Associate Professor')),
+                DataCell(Text('Student')),
+                DataCell(Text('Student'))
               ],
             ),
           ],
