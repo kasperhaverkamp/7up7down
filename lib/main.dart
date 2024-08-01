@@ -56,7 +56,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
+  bool fightStage = false;
+  int playerTurn = 0;
   int roundNumber = 0;
   int _counter = 0;
   List<int> expectedWins = [0, 0, 0, 0];
@@ -74,16 +75,31 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _subtractCounter() {
-    setState(() {
-      _counter--;
-    });
-  }
-  void submitExpectedWins() {
-    setState(() {
-
-    });
+    if (_counter > 0) {
+      setState(() {
+        _counter--;
+      });
+    }
   }
 
+  void _submitExpectedWins() {
+      setState(() {
+        expectedWins[playerTurn] = _counter;
+        if (playerTurn < 3) {
+          playerTurn++;
+        } else {
+          playerTurn = 0;
+        }
+        _counter = 0;
+      });
+
+    }
+  void _undo() {
+    setState(() {
+      playerTurn--;
+      expectedWins[playerTurn] = 0;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     String name1 = '';
@@ -125,6 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text('P1 ${expectedWins[0]} P2 ${expectedWins[1]} P3 ${expectedWins[2]} P3 ${expectedWins[3]}'),
             ExpectedWinsCard(counter: _counter),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -140,6 +157,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
+        SizedBox(height:30),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(onPressed: _undo, child: Text('undo turn')),
+            ElevatedButton(onPressed: _submitExpectedWins, child: Text('Submit')),
+          ],
+        ),
+
         DataTable(
           columns: <DataColumn> [
             DataColumn(label: Text('Round')),
