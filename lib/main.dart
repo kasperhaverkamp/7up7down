@@ -144,7 +144,6 @@ class ExpectedWinsPage extends StatelessWidget {
     var _names = appState._names;
     var score = appState.score;
     var expectedWins = appState.expectedWins;
-    var _counter = appState._counter;
     return Center(
       // Center is a layout widget. It takes a single child and positions it
       // in the middle of the parent.
