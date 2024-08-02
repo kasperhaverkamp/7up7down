@@ -72,9 +72,42 @@ class MyAppState extends ChangeNotifier {
     if (playerTurn < 3) {
       playerTurn++;
     } else {
-      playerTurn = 0;
+      fightStage = true;
     }
     _counter = 0;
+    notifyListeners();
+  }
+  void _test() {
+    print('check');
+    notifyListeners();
+
+
+
+}
+  List checkIcons = [
+    Icon(Icons.check_circle_outline),
+    Icon(Icons.check_circle_outline),
+    Icon(Icons.check_circle_outline),
+    Icon(Icons.check_circle_outline)
+  ];
+  List negativeIcons = [
+    Icon(Icons.cancel_outlined),
+    Icon(Icons.cancel_outlined),
+    Icon(Icons.cancel_outlined),
+    Icon(Icons.cancel_outlined)
+  ];
+
+  List winners = [false, false, false, false];
+  void _check(exP) {
+    winners[exP] = true;
+    checkIcons[exP] = Icon(Icons.check_circle);
+    negativeIcons[exP] = Icon(Icons.cancel_outlined);
+    notifyListeners();
+  }
+  void _cancel(exP) {
+    winners[exP] = false;
+    checkIcons[exP] = Icon(Icons.check_outlined);
+    negativeIcons[exP] = Icon(Icons.cancel);
     notifyListeners();
   }
 
@@ -99,17 +132,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
     Widget page;
-
+    if (appState.fightStage == true) {
+      selectedIndex = 1;
+    } else {
+      selectedIndex = 0;
+    }
     switch (selectedIndex) {
       case 0:
         page = ExpectedWinsPage();
         break;
       case 1:
-        page = Placeholder();
+        page = FightPage();
         break;
       default:
         throw UnimplementedError('No widget for $selectedIndex');
@@ -224,6 +261,72 @@ class ExpectedWinsPage extends StatelessWidget {
     );
   }
 }
+
+class FightPage extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(height: 175, width: 175,
+                    child: Card(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(appState._names[0], style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(onPressed: appState._test,
+                                  icon: Icon(Icons.cancel_outlined),
+                                  iconSize: 50,
+                              ),
+                              Text('${appState.expectedWins[0]}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                              IconButton(onPressed: appState._test,
+                                  icon: Icon(Icons.check_circle_outline),
+                                iconSize: 50,
+                              )
+                            ],
+                          ),
+                        ],
+                      )
+                    )
+
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(height: 175, width: 175, child: Placeholder()),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(height: 175, width: 175, child: Placeholder()),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(height: 175, width: 175, child: Placeholder()),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class ExpectedWinsCard extends StatelessWidget {
 
   @override
